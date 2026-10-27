@@ -1,7 +1,7 @@
 <?php
 
 /**
- * m4pmerchantpolicy
+ * m4p_merchantpolicy
  *
  * @author    Modules4Presta <contact@modules4presta.io>
  * @copyright 2026 Nice Code sp. z o.o. (Modules4Presta)

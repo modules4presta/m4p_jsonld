@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-    <name>m4pmerchantpolicy</name>
+    <name>m4p_merchantpolicy</name>
     <displayName><![CDATA[Return and shipping policy for Google]]></displayName>
     <version><![CDATA[1.0.2]]></version>
     <description><![CDATA[Return and shipping conditions of the shop as structured data in the Organization and Offer markup.]]></description>

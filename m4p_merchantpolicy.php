@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * m4pmerchantpolicy
+ * m4p_merchantpolicy
  *
  * @author    Modules4Presta <contact@modules4presta.io>
  * @copyright 2026 Nice Code sp. z o.o. (Modules4Presta)
@@ -19,7 +19,7 @@ if (!defined('_PS_VERSION_')) {
  * MerchantReturnPolicy and ShippingService, offer-level OfferShippingDetails and MerchantReturnPolicy.
  * The theme merges the arrays into its own JSON-LD (getOrganizationData(), getOfferData()).
  */
-class M4pMerchantPolicy extends Module
+class M4p_MerchantPolicy extends Module
 {
     public const CONFIG_ENABLED = 'M4PMERCHANTPOLICY_ENABLED';
     public const CONFIG_RETURN_DAYS = 'M4PMERCHANTPOLICY_RETURN_DAYS';
@@ -62,7 +62,7 @@ class M4pMerchantPolicy extends Module
 
     public function __construct()
     {
-        $this->name = 'm4pmerchantpolicy';
+        $this->name = 'm4p_merchantpolicy';
         $this->tab = 'seo';
         $this->version = '1.0.2';
         $this->author = 'Modules4Presta';
