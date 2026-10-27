@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-    <name>m4pmerchantpolicy</name>
+    <name>m4p_merchantpolicy</name>
     <displayName><![CDATA[Zasady zwrotów i wysyłki dla Google]]></displayName>
     <version><![CDATA[1.0.2]]></version>
     <description><![CDATA[Warunki zwrotów i wysyłki sklepu jako dane strukturalne organizacji i oferty.]]></description>

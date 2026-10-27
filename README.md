@@ -79,7 +79,7 @@ Both return `[]` while the module is switched off. Foreign rates come from the c
 ## Theme integration
 
 ```smarty
-{$mp = Module::getInstanceByName('m4pmerchantpolicy')}
+{$mp = Module::getInstanceByName('m4p_merchantpolicy')}
 {if $mp && $mp->active}
   {foreach $mp->getOfferData((int) $product.id, (int) $product.id_product_attribute) as $key => $value}
     {$offer[$key] = $value}
