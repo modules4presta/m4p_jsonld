@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="module" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="49bd000385ee478663696dd47d903b98">
+        <source>Return and shipping policy for Google</source>
+        <target>Return and shipping policy for Google</target>
+      </trans-unit>
+      <trans-unit id="7c0c65c50f94f68e36448597aa6d0f8d">
+        <source>Return and shipping conditions of the shop as structured data in the Organization and Offer markup.</source>
+        <target>Return and shipping conditions of the shop as structured data in the Organization and Offer markup.</target>
+      </trans-unit>
+      <trans-unit id="f38f5974cdc23279ffe6d203641a8bdf">
+        <source>Settings updated.</source>
+        <target>Settings updated.</target>
+      </trans-unit>
+      <trans-unit id="4be400e9dd00ab957010a5e24a93fb87">
+        <source>Days must be whole numbers, 0 or more.</source>
+        <target>Days must be whole numbers, 0 or more.</target>
+      </trans-unit>
+      <trans-unit id="12b02afcf517c22cee704faee95db0f2">
+        <source>Amounts must be numbers, 0 or more.</source>
+        <target>Amounts must be numbers, 0 or more.</target>
+      </trans-unit>
+      <trans-unit id="3f3c785ccccaf798e81d97cf2c428744">
+        <source>The return window must be at least 1 day.</source>
+        <target>The return window must be at least 1 day.</target>
+      </trans-unit>
+      <trans-unit id="8a302fac3a970395f0d4b79382439751">
+        <source>A minimum cannot be greater than its maximum.</source>
+        <target>A minimum cannot be greater than its maximum.</target>
+      </trans-unit>
+      <trans-unit id="441d338582f85c94d9a13d2d5f855434">
+        <source>Select at least one country for returns.</source>
+        <target>Select at least one country for returns.</target>
+      </trans-unit>
+      <trans-unit id="c650c42c7eea12e81447db4a9b04a53e">
+        <source>Google accepts at most 50 countries for returns.</source>
+        <target>Google accepts at most 50 countries for returns.</target>
+      </trans-unit>
+      <trans-unit id="7b7609d1131dce83612ba4f161d7f7ed">
+        <source>Select the shipping country.</source>
+        <target>Select the shipping country.</target>
+      </trans-unit>
+      <trans-unit id="44fdec47036f482b68b748f9d786801b">
+        <source>days</source>
+        <target>days</target>
+      </trans-unit>
+      <trans-unit id="a62dda7f9fd20f8d68c928f1d82af931">
+        <source>None (domestic shipping only)</source>
+        <target>None (domestic shipping only)</target>
+      </trans-unit>
+      <trans-unit id="4762fdc5fdf2ab3118f73fe252a6668b">
+        <source>Returns</source>
+        <target>Returns</target>
+      </trans-unit>
+      <trans-unit id="1a3d7892c3cb11f3c24c2b8633629664">
+        <source>Add the policies to the structured data</source>
+        <target>Add the policies to the structured data</target>
+      </trans-unit>
+      <trans-unit id="1148c4a97f15ac3beca6f3df8fc58172">
+        <source>Organization markup on the home page, Offer markup on product pages.</source>
+        <target>Organization markup on the home page, Offer markup on product pages.</target>
+      </trans-unit>
+      <trans-unit id="53f2da10b8b14a1db85d28656a4cc489">
+        <source>Return window</source>
+        <target>Return window</target>
+      </trans-unit>
+      <trans-unit id="5023ba1cec14d3e6d028ed70d2eb6f16">
+        <source>Days from delivery.</source>
+        <target>Days from delivery.</target>
+      </trans-unit>
+      <trans-unit id="4059c295199e1aac33f36f2c31fad741">
+        <source>Return shipping fee (gross)</source>
+        <target>Return shipping fee (gross)</target>
+      </trans-unit>
+      <trans-unit id="b9854a5242eec1390eafa3ba14867282">
+        <source>Paid by the customer. 0 means free returns.</source>
+        <target>Paid by the customer. 0 means free returns.</target>
+      </trans-unit>
+      <trans-unit id="40bf7bb140ad2b969a69870c367ca1e8">
+        <source>Return method</source>
+        <target>Return method</target>
+      </trans-unit>
+      <trans-unit id="409b1ef3ad4fe98ad063fb3026c6b250">
+        <source>By mail</source>
+        <target>By mail</target>
+      </trans-unit>
+      <trans-unit id="f6e4befca7d2243bcb09c7ac0a8f1aed">
+        <source>In store</source>
+        <target>In store</target>
+      </trans-unit>
+      <trans-unit id="8a511d359173d8de5a94901d6ccfc9df">
+        <source>Countries the return policy applies to</source>
+        <target>Countries the return policy applies to</target>
+      </trans-unit>
+      <trans-unit id="b8a8e507541f5729b1759c6939c670ec">
+        <source>At most 50.</source>
+        <target>At most 50.</target>
+      </trans-unit>
+      <trans-unit id="baf3f8e4c5a18ead2d7b306e6739bd58">
+        <source>Return policy page</source>
+        <target>Return policy page</target>
+      </trans-unit>
+      <trans-unit id="10adde1a6990f6e032648107af592baa">
+        <source>Empty: the threshold of the free delivery module (now %amount%). 0 turns free shipping off in the markup.</source>
+        <target>Empty: the threshold of the free delivery module (now %amount%). 0 turns free shipping off in the markup.</target>
+      </trans-unit>
+      <trans-unit id="2399cb8e093855defe729c4207442af0">
+        <source>Empty: "Free shipping starts at" from Shipping &gt; Preferences. 0 turns free shipping off in the markup.</source>
+        <target>Empty: "Free shipping starts at" from Shipping &gt; Preferences. 0 turns free shipping off in the markup.</target>
+      </trans-unit>
+      <trans-unit id="ea9cf7e47ff33b2be14e6dd07cbcefc6">
+        <source>Shipping</source>
+        <target>Shipping</target>
+      </trans-unit>
+      <trans-unit id="b4e5ad56a90c4a4c6936da3aa74f4e6f">
+        <source>Shipping country</source>
+        <target>Shipping country</target>
+      </trans-unit>
+      <trans-unit id="60757e716dd2297a8794890a97443a72">
+        <source>Lowest shipping cost (gross)</source>
+        <target>Lowest shipping cost (gross)</target>
+      </trans-unit>
+      <trans-unit id="a35c95c572521fadef2b078c0c64b5f8">
+        <source>Highest shipping cost (gross)</source>
+        <target>Highest shipping cost (gross)</target>
+      </trans-unit>
+      <trans-unit id="d0d44c93411a77204b17c2f55357c3c9">
+        <source>Free shipping from (gross)</source>
+        <target>Free shipping from (gross)</target>
+      </trans-unit>
+      <trans-unit id="ca0161cfa3305110d3c9107d03f88246">
+        <source>Handling time from</source>
+        <target>Handling time from</target>
+      </trans-unit>
+      <trans-unit id="4d8aab419344b7beff02bb2bb8bbdf5a">
+        <source>Business days from the order to dispatch.</source>
+        <target>Business days from the order to dispatch.</target>
+      </trans-unit>
+      <trans-unit id="3f5afe09c219c89c1f50a17c58c09391">
+        <source>Handling time to</source>
+        <target>Handling time to</target>
+      </trans-unit>
+      <trans-unit id="dea44581f28c1b682d453b0b45867aa3">
+        <source>Transit time from</source>
+        <target>Transit time from</target>
+      </trans-unit>
+      <trans-unit id="51b5db19783333604aadca396d690330">
+        <source>Business days from dispatch to delivery.</source>
+        <target>Business days from dispatch to delivery.</target>
+      </trans-unit>
+      <trans-unit id="9523effaeec44687289ed103237fd489">
+        <source>Transit time to</source>
+        <target>Transit time to</target>
+      </trans-unit>
+      <trans-unit id="5adb7cd0ca42f74a9c7f02b70bb513c4">
+        <source>Carrier for other countries</source>
+        <target>Carrier for other countries</target>
+      </trans-unit>
+      <trans-unit id="22d77b6001c0d1139a6757001edb8512">
+        <source>Product pages get a shipping rate for every active country in the zones of this carrier: its price for the product weight, with the VAT of that country.</source>
+        <target>Product pages get a shipping rate for every active country in the zones of this carrier: its price for the product weight, with the VAT of that country.</target>
+      </trans-unit>
+      <trans-unit id="e0e8c8f55527068de6a45a078d49c37e">
+        <source>Transit time abroad from</source>
+        <target>Transit time abroad from</target>
+      </trans-unit>
+      <trans-unit id="da89e928469c9e8380be8ad21cff80b8">
+        <source>Transit time abroad to</source>
+        <target>Transit time abroad to</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

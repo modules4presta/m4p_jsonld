@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>m4pmerchantpolicy</name>
+    <displayName><![CDATA[Zasady zwrotów i wysyłki dla Google]]></displayName>
+    <version><![CDATA[1.0.2]]></version>
+    <description><![CDATA[Warunki zwrotów i wysyłki sklepu jako dane strukturalne organizacji i oferty.]]></description>
+    <author><![CDATA[Modules4Presta]]></author>
+    <tab><![CDATA[seo]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+    <limited_countries></limited_countries>
+</module>
