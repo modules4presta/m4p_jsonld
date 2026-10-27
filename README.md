@@ -1,8 +1,8 @@
-# Return and shipping policy for Google for PrestaShop 8
+# Structured data for PrestaShop 8 & 9
 
-**Your return window, return fee and delivery costs in the structured data Google reads for merchant listings – set once in the back office, current on every product page.**
+**The shop's JSON-LD in one module. This release covers the fields Google reads for merchant listings: return window, return fee and delivery costs – set once in the back office, current on every product page.**
 
-> **Meta description (155 chars):** Return policy and shipping details as schema.org JSON-LD for PrestaShop: MerchantReturnPolicy and OfferShippingDetails for Google. Free, MIT.
+> **Meta description (155 chars):** Structured data for PrestaShop as schema.org JSON-LD: MerchantReturnPolicy and OfferShippingDetails for Google merchant listings. Free, MIT.
 
 ---
 
@@ -79,7 +79,7 @@ Both return `[]` while the module is switched off. Foreign rates come from the c
 ## Theme integration
 
 ```smarty
-{$mp = Module::getInstanceByName('m4p_merchantpolicy')}
+{$mp = Module::getInstanceByName('m4p_jsonld')}
 {if $mp && $mp->active}
   {foreach $mp->getOfferData((int) $product.id, (int) $product.id_product_attribute) as $key => $value}
     {$offer[$key] = $value}
