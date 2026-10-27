@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * m4p_merchantpolicy
+ * m4p_jsonld
  *
  * @author    Modules4Presta <contact@modules4presta.io>
  * @copyright 2026 Nice Code sp. z o.o. (Modules4Presta)
@@ -19,7 +19,7 @@ if (!defined('_PS_VERSION_')) {
  * MerchantReturnPolicy and ShippingService, offer-level OfferShippingDetails and MerchantReturnPolicy.
  * The theme merges the arrays into its own JSON-LD (getOrganizationData(), getOfferData()).
  */
-class M4p_MerchantPolicy extends Module
+class M4p_JsonLd extends Module
 {
     public const CONFIG_ENABLED = 'M4PMERCHANTPOLICY_ENABLED';
     public const CONFIG_RETURN_DAYS = 'M4PMERCHANTPOLICY_RETURN_DAYS';
@@ -62,9 +62,9 @@ class M4p_MerchantPolicy extends Module
 
     public function __construct()
     {
-        $this->name = 'm4p_merchantpolicy';
+        $this->name = 'm4p_jsonld';
         $this->tab = 'seo';
-        $this->version = '1.0.2';
+        $this->version = '2.0.0';
         $this->author = 'Modules4Presta';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -72,8 +72,8 @@ class M4p_MerchantPolicy extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Return and shipping policy for Google', [], 'Modules.M4pmerchantpolicy.Admin');
-        $this->description = $this->trans('Return and shipping conditions of the shop as structured data in the Organization and Offer markup.', [], 'Modules.M4pmerchantpolicy.Admin');
+        $this->displayName = $this->trans('Structured data (JSON-LD)', [], 'Modules.M4pjsonld.Admin');
+        $this->description = $this->trans('Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.', [], 'Modules.M4pjsonld.Admin');
     }
 
     public function isUsingNewTranslationSystem(): bool
@@ -240,7 +240,7 @@ class M4p_MerchantPolicy extends Module
     {
         $output = '';
 
-        if (Tools::isSubmit('submitM4pmerchantpolicy')) {
+        if (Tools::isSubmit('submitM4pJsonLd')) {
             [$values, $errors] = $this->readForm();
             if ($errors) {
                 $output .= $this->displayError($errors);
@@ -248,7 +248,7 @@ class M4p_MerchantPolicy extends Module
                 foreach ($values as $key => $value) {
                     Configuration::updateValue($key, $value);
                 }
-                $output .= $this->displayConfirmation($this->trans('Settings updated.', [], 'Modules.M4pmerchantpolicy.Admin'));
+                $output .= $this->displayConfirmation($this->trans('Settings updated.', [], 'Modules.M4pjsonld.Admin'));
             }
         }
 
@@ -266,14 +266,14 @@ class M4p_MerchantPolicy extends Module
         foreach (self::INT_FIELDS as $key) {
             $raw = trim((string) Tools::getValue($key));
             if (!ctype_digit($raw)) {
-                $errors[$key] = $this->trans('Days must be whole numbers, 0 or more.', [], 'Modules.M4pmerchantpolicy.Admin');
+                $errors[$key] = $this->trans('Days must be whole numbers, 0 or more.', [], 'Modules.M4pjsonld.Admin');
             }
             $values[$key] = (int) $raw;
         }
         foreach (self::AMOUNT_FIELDS as $key) {
             $amount = $this->parseAmount((string) Tools::getValue($key));
             if ($amount === null) {
-                $errors[$key] = $this->trans('Amounts must be numbers, 0 or more.', [], 'Modules.M4pmerchantpolicy.Admin');
+                $errors[$key] = $this->trans('Amounts must be numbers, 0 or more.', [], 'Modules.M4pjsonld.Admin');
             }
             $values[$key] = (string) ($amount ?? 0);
         }
@@ -282,20 +282,20 @@ class M4p_MerchantPolicy extends Module
         if ($freeFrom !== '') {
             $amount = $this->parseAmount($freeFrom);
             if ($amount === null) {
-                $errors[self::CONFIG_FREE_FROM] = $this->trans('Amounts must be numbers, 0 or more.', [], 'Modules.M4pmerchantpolicy.Admin');
+                $errors[self::CONFIG_FREE_FROM] = $this->trans('Amounts must be numbers, 0 or more.', [], 'Modules.M4pjsonld.Admin');
             }
             $freeFrom = (string) ($amount ?? '');
         }
         $values[self::CONFIG_FREE_FROM] = $freeFrom;
 
         if ($values[self::CONFIG_RETURN_DAYS] < 1) {
-            $errors[] = $this->trans('The return window must be at least 1 day.', [], 'Modules.M4pmerchantpolicy.Admin');
+            $errors[] = $this->trans('The return window must be at least 1 day.', [], 'Modules.M4pjsonld.Admin');
         }
         if ($values[self::CONFIG_HANDLING_MIN] > $values[self::CONFIG_HANDLING_MAX]
             || $values[self::CONFIG_TRANSIT_MIN] > $values[self::CONFIG_TRANSIT_MAX]
             || $values[self::CONFIG_EU_TRANSIT_MIN] > $values[self::CONFIG_EU_TRANSIT_MAX]
             || (float) $values[self::CONFIG_SHIP_COST_MIN] > (float) $values[self::CONFIG_SHIP_COST_MAX]) {
-            $errors[] = $this->trans('A minimum cannot be greater than its maximum.', [], 'Modules.M4pmerchantpolicy.Admin');
+            $errors[] = $this->trans('A minimum cannot be greater than its maximum.', [], 'Modules.M4pjsonld.Admin');
         }
 
         $method = (string) Tools::getValue(self::CONFIG_RETURN_METHOD);
@@ -303,10 +303,10 @@ class M4p_MerchantPolicy extends Module
 
         $countries = array_values(array_unique(array_filter(array_map('intval', (array) Tools::getValue(self::CONFIG_RETURN_COUNTRIES, [])))));
         if (!$countries) {
-            $errors[] = $this->trans('Select at least one country for returns.', [], 'Modules.M4pmerchantpolicy.Admin');
+            $errors[] = $this->trans('Select at least one country for returns.', [], 'Modules.M4pjsonld.Admin');
         }
         if (count($countries) > 50) {
-            $errors[] = $this->trans('Google accepts at most 50 countries for returns.', [], 'Modules.M4pmerchantpolicy.Admin');
+            $errors[] = $this->trans('Google accepts at most 50 countries for returns.', [], 'Modules.M4pjsonld.Admin');
         }
         $values[self::CONFIG_RETURN_COUNTRIES] = (string) json_encode($countries);
 
@@ -314,7 +314,7 @@ class M4p_MerchantPolicy extends Module
         $values[self::CONFIG_EU_CARRIER] = (int) Tools::getValue(self::CONFIG_EU_CARRIER);
         $values[self::CONFIG_SHIP_COUNTRY] = (int) Tools::getValue(self::CONFIG_SHIP_COUNTRY);
         if (!Country::getIsoById($values[self::CONFIG_SHIP_COUNTRY])) {
-            $errors[] = $this->trans('Select the shipping country.', [], 'Modules.M4pmerchantpolicy.Admin');
+            $errors[] = $this->trans('Select the shipping country.', [], 'Modules.M4pjsonld.Admin');
         }
 
         return [$values, array_values(array_unique($errors))];
@@ -331,7 +331,7 @@ class M4p_MerchantPolicy extends Module
     {
         $idLang = (int) $this->context->language->id;
         $sign = Currency::getDefaultCurrency()->sign;
-        $days = $this->trans('days', [], 'Modules.M4pmerchantpolicy.Admin');
+        $days = $this->trans('days', [], 'Modules.M4pjsonld.Admin');
         $countries = array_map(
             static fn (array $country): array => ['id' => (int) $country['id_country'], 'name' => $country['name']],
             Country::getCountries($idLang, true)
@@ -340,7 +340,7 @@ class M4p_MerchantPolicy extends Module
         foreach (CMS::getCMSPages($idLang, null, true) as $cms) {
             $cmsPages[] = ['id' => (int) $cms['id_cms'], 'name' => $cms['meta_title']];
         }
-        $carriers = [['id' => 0, 'name' => $this->trans('None (domestic shipping only)', [], 'Modules.M4pmerchantpolicy.Admin')]];
+        $carriers = [['id' => 0, 'name' => $this->trans('None (domestic shipping only)', [], 'Modules.M4pjsonld.Admin')]];
         foreach (Carrier::getCarriers($idLang, true, false, false, null, Carrier::ALL_CARRIERS) as $carrier) {
             $carriers[] = ['id' => (int) $carrier['id_reference'], 'name' => $carrier['name']];
         }
@@ -362,52 +362,52 @@ class M4p_MerchantPolicy extends Module
             'options' => ['query' => $options, 'id' => 'id', 'name' => 'name'],
             'desc' => $desc,
         ];
-        $submit = ['title' => $this->trans('Save', [], 'Admin.Actions'), 'name' => 'submitM4pmerchantpolicy'];
+        $submit = ['title' => $this->trans('Save', [], 'Admin.Actions'), 'name' => 'submitM4pJsonLd'];
 
         $returnsForm = ['form' => [
-            'legend' => ['title' => $this->trans('Returns', [], 'Modules.M4pmerchantpolicy.Admin'), 'icon' => 'icon-undo'],
+            'legend' => ['title' => $this->trans('Returns', [], 'Modules.M4pjsonld.Admin'), 'icon' => 'icon-undo'],
             'input' => [
                 [
                     'type' => 'switch',
                     'name' => self::CONFIG_ENABLED,
-                    'label' => $this->trans('Add the policies to the structured data', [], 'Modules.M4pmerchantpolicy.Admin'),
+                    'label' => $this->trans('Add the policies to the structured data', [], 'Modules.M4pjsonld.Admin'),
                     'is_bool' => true,
                     'values' => [
                         ['id' => 'on', 'value' => 1, 'label' => $this->trans('Yes', [], 'Admin.Global')],
                         ['id' => 'off', 'value' => 0, 'label' => $this->trans('No', [], 'Admin.Global')],
                     ],
-                    'desc' => $this->trans('Organization markup on the home page, Offer markup on product pages.', [], 'Modules.M4pmerchantpolicy.Admin'),
+                    'desc' => $this->trans('Organization markup on the home page, Offer markup on product pages.', [], 'Modules.M4pjsonld.Admin'),
                 ],
-                $text(self::CONFIG_RETURN_DAYS, $this->trans('Return window', [], 'Modules.M4pmerchantpolicy.Admin'), $days, $this->trans('Days from delivery.', [], 'Modules.M4pmerchantpolicy.Admin')),
-                $text(self::CONFIG_RETURN_FEE, $this->trans('Return shipping fee (gross)', [], 'Modules.M4pmerchantpolicy.Admin'), $sign, $this->trans('Paid by the customer. 0 means free returns.', [], 'Modules.M4pmerchantpolicy.Admin')),
-                $select(self::CONFIG_RETURN_METHOD, $this->trans('Return method', [], 'Modules.M4pmerchantpolicy.Admin'), [
-                    ['id' => self::METHOD_BY_MAIL, 'name' => $this->trans('By mail', [], 'Modules.M4pmerchantpolicy.Admin')],
-                    ['id' => self::METHOD_IN_STORE, 'name' => $this->trans('In store', [], 'Modules.M4pmerchantpolicy.Admin')],
+                $text(self::CONFIG_RETURN_DAYS, $this->trans('Return window', [], 'Modules.M4pjsonld.Admin'), $days, $this->trans('Days from delivery.', [], 'Modules.M4pjsonld.Admin')),
+                $text(self::CONFIG_RETURN_FEE, $this->trans('Return shipping fee (gross)', [], 'Modules.M4pjsonld.Admin'), $sign, $this->trans('Paid by the customer. 0 means free returns.', [], 'Modules.M4pjsonld.Admin')),
+                $select(self::CONFIG_RETURN_METHOD, $this->trans('Return method', [], 'Modules.M4pjsonld.Admin'), [
+                    ['id' => self::METHOD_BY_MAIL, 'name' => $this->trans('By mail', [], 'Modules.M4pjsonld.Admin')],
+                    ['id' => self::METHOD_IN_STORE, 'name' => $this->trans('In store', [], 'Modules.M4pjsonld.Admin')],
                 ]),
-                $select(self::CONFIG_RETURN_COUNTRIES, $this->trans('Countries the return policy applies to', [], 'Modules.M4pmerchantpolicy.Admin'), $countries, $this->trans('At most 50.', [], 'Modules.M4pmerchantpolicy.Admin'), true),
-                $select(self::CONFIG_RETURN_CMS, $this->trans('Return policy page', [], 'Modules.M4pmerchantpolicy.Admin'), $cmsPages),
+                $select(self::CONFIG_RETURN_COUNTRIES, $this->trans('Countries the return policy applies to', [], 'Modules.M4pjsonld.Admin'), $countries, $this->trans('At most 50.', [], 'Modules.M4pjsonld.Admin'), true),
+                $select(self::CONFIG_RETURN_CMS, $this->trans('Return policy page', [], 'Modules.M4pjsonld.Admin'), $cmsPages),
             ],
             'submit' => $submit,
         ]];
 
         $freeDesc = $this->getFreeShippingModule()
-            ? $this->trans('Empty: the threshold of the free delivery module (now %amount%). 0 turns free shipping off in the markup.', ['%amount%' => $this->formatAmount((float) Configuration::get('M4PFREESHIPPING_DEFAULT'))], 'Modules.M4pmerchantpolicy.Admin')
-            : $this->trans('Empty: "Free shipping starts at" from Shipping > Preferences. 0 turns free shipping off in the markup.', [], 'Modules.M4pmerchantpolicy.Admin');
+            ? $this->trans('Empty: the threshold of the free delivery module (now %amount%). 0 turns free shipping off in the markup.', ['%amount%' => $this->formatAmount((float) Configuration::get('M4PFREESHIPPING_DEFAULT'))], 'Modules.M4pjsonld.Admin')
+            : $this->trans('Empty: "Free shipping starts at" from Shipping > Preferences. 0 turns free shipping off in the markup.', [], 'Modules.M4pjsonld.Admin');
 
         $shippingForm = ['form' => [
-            'legend' => ['title' => $this->trans('Shipping', [], 'Modules.M4pmerchantpolicy.Admin'), 'icon' => 'icon-truck'],
+            'legend' => ['title' => $this->trans('Shipping', [], 'Modules.M4pjsonld.Admin'), 'icon' => 'icon-truck'],
             'input' => [
-                $select(self::CONFIG_SHIP_COUNTRY, $this->trans('Shipping country', [], 'Modules.M4pmerchantpolicy.Admin'), $countries),
-                $text(self::CONFIG_SHIP_COST_MIN, $this->trans('Lowest shipping cost (gross)', [], 'Modules.M4pmerchantpolicy.Admin'), $sign),
-                $text(self::CONFIG_SHIP_COST_MAX, $this->trans('Highest shipping cost (gross)', [], 'Modules.M4pmerchantpolicy.Admin'), $sign),
-                $text(self::CONFIG_FREE_FROM, $this->trans('Free shipping from (gross)', [], 'Modules.M4pmerchantpolicy.Admin'), $sign, $freeDesc),
-                $text(self::CONFIG_HANDLING_MIN, $this->trans('Handling time from', [], 'Modules.M4pmerchantpolicy.Admin'), $days, $this->trans('Business days from the order to dispatch.', [], 'Modules.M4pmerchantpolicy.Admin')),
-                $text(self::CONFIG_HANDLING_MAX, $this->trans('Handling time to', [], 'Modules.M4pmerchantpolicy.Admin'), $days),
-                $text(self::CONFIG_TRANSIT_MIN, $this->trans('Transit time from', [], 'Modules.M4pmerchantpolicy.Admin'), $days, $this->trans('Business days from dispatch to delivery.', [], 'Modules.M4pmerchantpolicy.Admin')),
-                $text(self::CONFIG_TRANSIT_MAX, $this->trans('Transit time to', [], 'Modules.M4pmerchantpolicy.Admin'), $days),
-                $select(self::CONFIG_EU_CARRIER, $this->trans('Carrier for other countries', [], 'Modules.M4pmerchantpolicy.Admin'), $carriers, $this->trans('Product pages get a shipping rate for every active country in the zones of this carrier: its price for the product weight, with the VAT of that country.', [], 'Modules.M4pmerchantpolicy.Admin')),
-                $text(self::CONFIG_EU_TRANSIT_MIN, $this->trans('Transit time abroad from', [], 'Modules.M4pmerchantpolicy.Admin'), $days),
-                $text(self::CONFIG_EU_TRANSIT_MAX, $this->trans('Transit time abroad to', [], 'Modules.M4pmerchantpolicy.Admin'), $days),
+                $select(self::CONFIG_SHIP_COUNTRY, $this->trans('Shipping country', [], 'Modules.M4pjsonld.Admin'), $countries),
+                $text(self::CONFIG_SHIP_COST_MIN, $this->trans('Lowest shipping cost (gross)', [], 'Modules.M4pjsonld.Admin'), $sign),
+                $text(self::CONFIG_SHIP_COST_MAX, $this->trans('Highest shipping cost (gross)', [], 'Modules.M4pjsonld.Admin'), $sign),
+                $text(self::CONFIG_FREE_FROM, $this->trans('Free shipping from (gross)', [], 'Modules.M4pjsonld.Admin'), $sign, $freeDesc),
+                $text(self::CONFIG_HANDLING_MIN, $this->trans('Handling time from', [], 'Modules.M4pjsonld.Admin'), $days, $this->trans('Business days from the order to dispatch.', [], 'Modules.M4pjsonld.Admin')),
+                $text(self::CONFIG_HANDLING_MAX, $this->trans('Handling time to', [], 'Modules.M4pjsonld.Admin'), $days),
+                $text(self::CONFIG_TRANSIT_MIN, $this->trans('Transit time from', [], 'Modules.M4pjsonld.Admin'), $days, $this->trans('Business days from dispatch to delivery.', [], 'Modules.M4pjsonld.Admin')),
+                $text(self::CONFIG_TRANSIT_MAX, $this->trans('Transit time to', [], 'Modules.M4pjsonld.Admin'), $days),
+                $select(self::CONFIG_EU_CARRIER, $this->trans('Carrier for other countries', [], 'Modules.M4pjsonld.Admin'), $carriers, $this->trans('Product pages get a shipping rate for every active country in the zones of this carrier: its price for the product weight, with the VAT of that country.', [], 'Modules.M4pjsonld.Admin')),
+                $text(self::CONFIG_EU_TRANSIT_MIN, $this->trans('Transit time abroad from', [], 'Modules.M4pjsonld.Admin'), $days),
+                $text(self::CONFIG_EU_TRANSIT_MAX, $this->trans('Transit time abroad to', [], 'Modules.M4pjsonld.Admin'), $days),
             ],
             'submit' => $submit,
         ]];
@@ -416,7 +416,7 @@ class M4p_MerchantPolicy extends Module
         foreach (array_keys($this->getDefaults()) as $key) {
             $fields[$key] = Tools::getValue($key, Configuration::get($key));
         }
-        $fields[self::CONFIG_RETURN_COUNTRIES . '[]'] = Tools::isSubmit('submitM4pmerchantpolicy')
+        $fields[self::CONFIG_RETURN_COUNTRIES . '[]'] = Tools::isSubmit('submitM4pJsonLd')
             ? array_map('intval', (array) Tools::getValue(self::CONFIG_RETURN_COUNTRIES, []))
             : $this->getReturnCountryIds();
 
@@ -425,7 +425,7 @@ class M4p_MerchantPolicy extends Module
         $helper->name_controller = $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
-        $helper->submit_action = 'submitM4pmerchantpolicy';
+        $helper->submit_action = 'submitM4pJsonLd';
         $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
         $helper->tpl_vars = ['fields_value' => $fields];
 

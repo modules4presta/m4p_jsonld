@@ -4,6 +4,19 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the module uses
 [semantic versioning](https://semver.org/).
 
+## [2.0.0] - 2026-10-28
+
+The module is now the shop's structured-data module and is installed as `m4p_jsonld`. Settings are
+unchanged, and so are their names, so a shop that carries them over keeps its configuration.
+
+### Changed
+
+- Module name, directory and class: `m4p_jsonld` and `M4p_JsonLd`. PrestaShop reads the directory
+  name as the module's identity, so the previous directory stays in place until it is removed by
+  hand and the settings are carried over.
+- Translation domain `Modules.M4pjsonld`, with the catalogue files renamed to match.
+- The name and description name the whole scope of the module instead of one of its areas.
+
 ## [1.0.2] - 2026-10-27
 
 ### Changed

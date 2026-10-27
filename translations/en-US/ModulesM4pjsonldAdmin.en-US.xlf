@@ -2,13 +2,13 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="module" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="49bd000385ee478663696dd47d903b98">
-        <source>Return and shipping policy for Google</source>
-        <target>Return and shipping policy for Google</target>
+      <trans-unit id="9a3366ab7f89ff2b278327d0d80bc4cc">
+        <source>Structured data (JSON-LD)</source>
+        <target>Structured data (JSON-LD)</target>
       </trans-unit>
-      <trans-unit id="7c0c65c50f94f68e36448597aa6d0f8d">
-        <source>Return and shipping conditions of the shop as structured data in the Organization and Offer markup.</source>
-        <target>Return and shipping conditions of the shop as structured data in the Organization and Offer markup.</target>
+      <trans-unit id="6fd0ce7c14bd2f53239af257f4d8b724">
+        <source>Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.</source>
+        <target>Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.</target>
       </trans-unit>
       <trans-unit id="f38f5974cdc23279ffe6d203641a8bdf">
         <source>Settings updated.</source>
