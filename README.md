@@ -22,6 +22,7 @@ The module builds the schema.org arrays and returns them to the theme, which mer
 
 ### Key features
 
+- **Organization identity** – name, main website, description, logo and profiles (`sameAs`) of the organization behind the shop, with an `@id` built from the website. Several sites of one company point to the same organization, so search engines and AI assistants connect them.
 - **MerchantReturnPolicy** – finite return window, return method, countries, return fee (`FreeReturn` for 0) and a link to your returns page.
 - **ShippingService** for the organization – handling time and the cost range for the shipping country, plus a free shipping condition from an order value.
 - **OfferShippingDetails** for each product – free when the product's gross price reaches the threshold, and one rate per active country in the zones of a selected foreign carrier, with that country's VAT.
@@ -35,7 +36,7 @@ The module installs switched off, with neutral defaults: a 14-day return window,
 
 | | |
 |---|---|
-| PrestaShop | 8.0 – 8.2 (9.x not tested yet) |
+| PrestaShop | 8.0 – 9.1 (return and shipping data tested on 8.x) |
 | PHP | 7.4+ |
 | Requirements | a theme with product JSON-LD (the module adds to it) |
 | Multistore | Settings follow the shop context of the configuration page |
@@ -53,6 +54,11 @@ The module overrides no core class and creates no database table.
 
 | Setting | Configuration key | Default |
 |---|---|---|
+| Organization name | `M4P_JSONLD_ORG_NAME` | empty: the shop name |
+| Organization website | `M4P_JSONLD_ORG_URL` | empty: this shop; `@id` is `<website>#organization` |
+| Organization description | `M4P_JSONLD_ORG_DESCRIPTION` | empty: no description |
+| Organization logo | `M4P_JSONLD_ORG_LOGO` | empty: the shop logo |
+| Organization profiles (`sameAs`) | `M4P_JSONLD_ORG_SAME_AS` | empty; one address per line |
 | Add the policies to the structured data | `M4PMERCHANTPOLICY_ENABLED` | off |
 | Return window (days) | `M4PMERCHANTPOLICY_RETURN_DAYS` | 14 |
 | Return shipping fee (gross) | `M4PMERCHANTPOLICY_RETURN_FEE` | 0 (`FreeReturn`) |
@@ -71,10 +77,10 @@ The module overrides no core class and creates no database table.
 
 | Method | Where | Properties |
 |---|---|---|
-| `getOrganizationData()` | `Organization` (home page) | `hasMerchantReturnPolicy`, `hasShippingService` |
+| `getOrganizationData()` | `Organization` | `@id` always; `name`, `url`, `description`, `logo`, `sameAs` when set; `hasMerchantReturnPolicy`, `hasShippingService` while the policies are on |
 | `getOfferData(int $idProduct, int $idProductAttribute = 0)` | `Offer` (product page) | `hasMerchantReturnPolicy`, `shippingDetails` |
 
-Both return `[]` while the module is switched off. Foreign rates come from the carrier's weight ranges for the product's weight (product plus combination), plus handling and the product's additional shipping cost. A country outside the ranges (with "out of range: disable") is left out, and so is the carrier for a product limited to other carriers. Organization amounts are in the default currency, offer amounts in the context currency, as Google expects the Offer's currency.
+`getOfferData()` returns `[]` while the policies are switched off. Foreign rates come from the carrier's weight ranges for the product's weight (product plus combination), plus handling and the product's additional shipping cost. A country outside the ranges (with "out of range: disable") is left out, and so is the carrier for a product limited to other carriers. Organization amounts are in the default currency, offer amounts in the context currency, as Google expects the Offer's currency.
 
 ## Theme integration
 
@@ -87,7 +93,17 @@ Both return `[]` while the module is switched off. Foreign rates come from the c
 {/if}
 ```
 
-The same pattern with `getOrganizationData()` goes into the `Organization` node. Render the result with `json_encode`, not by hand.
+The organization data also reaches every front template as `$modules.m4p_jsonld.organization`, so the theme needs no call to the module:
+
+```smarty
+{if isset($modules.m4p_jsonld.organization)}
+  {foreach $modules.m4p_jsonld.organization as $key => $value}
+    {$organization[$key] = $value}
+  {/foreach}
+{/if}
+```
+
+Render the result with `json_encode`, not by hand. Give the `WebSite` node `"publisher": {"@id": …}` with the organization's `@id`.
 
 ## Frequently asked questions
 

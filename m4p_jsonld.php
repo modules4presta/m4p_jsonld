@@ -15,9 +15,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * Return and shipping policy of the shop as schema.org data for Google: organization-level
+ * Structured data of the shop as schema.org data for Google: the organization's identity, organization-level
  * MerchantReturnPolicy and ShippingService, offer-level OfferShippingDetails and MerchantReturnPolicy.
- * The theme merges the arrays into its own JSON-LD (getOrganizationData(), getOfferData()).
+ * The theme merges the arrays into its own JSON-LD (getOrganizationData(), getOfferData(), or
+ * `$modules.m4p_jsonld.organization` in templates).
  */
 class M4p_JsonLd extends Module
 {
@@ -38,6 +39,11 @@ class M4p_JsonLd extends Module
     public const CONFIG_EU_CARRIER = 'M4PMERCHANTPOLICY_EU_CARRIER';
     public const CONFIG_EU_TRANSIT_MIN = 'M4PMERCHANTPOLICY_EU_TRANSIT_MIN';
     public const CONFIG_EU_TRANSIT_MAX = 'M4PMERCHANTPOLICY_EU_TRANSIT_MAX';
+    public const CONFIG_ORG_NAME = 'M4P_JSONLD_ORG_NAME';
+    public const CONFIG_ORG_URL = 'M4P_JSONLD_ORG_URL';
+    public const CONFIG_ORG_SAME_AS = 'M4P_JSONLD_ORG_SAME_AS';
+    public const CONFIG_ORG_LOGO = 'M4P_JSONLD_ORG_LOGO';
+    public const CONFIG_ORG_DESCRIPTION = 'M4P_JSONLD_ORG_DESCRIPTION';
 
     public const METHOD_BY_MAIL = 'ReturnByMail';
     public const METHOD_IN_STORE = 'ReturnInStore';
@@ -64,7 +70,7 @@ class M4p_JsonLd extends Module
     {
         $this->name = 'm4p_jsonld';
         $this->tab = 'seo';
-        $this->version = '2.0.0';
+        $this->version = '2.1.0';
         $this->author = 'Modules4Presta';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -73,7 +79,7 @@ class M4p_JsonLd extends Module
         parent::__construct();
 
         $this->displayName = $this->trans('Structured data (JSON-LD)', [], 'Modules.M4pjsonld.Admin');
-        $this->description = $this->trans('Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.', [], 'Modules.M4pjsonld.Admin');
+        $this->description = $this->trans('Structured data of the shop as JSON-LD. Covers the identity of the Organization and the return and shipping conditions of the Organization and Offer markup.', [], 'Modules.M4pjsonld.Admin');
     }
 
     public function isUsingNewTranslationSystem(): bool
@@ -87,7 +93,7 @@ class M4p_JsonLd extends Module
             Configuration::updateValue($key, $value);
         }
 
-        return parent::install();
+        return parent::install() && $this->registerHook('actionFrontControllerSetVariables');
     }
 
     public function uninstall(): bool
@@ -100,16 +106,74 @@ class M4p_JsonLd extends Module
     }
 
     /**
-     * Properties to merge into the Organization node: hasMerchantReturnPolicy and hasShippingService.
+     * Template variables under `$modules.m4p_jsonld`.
      *
      * @return array<string, array<string, mixed>>
      */
+    public function hookActionFrontControllerSetVariables(): array
+    {
+        return ['organization' => $this->getOrganizationData()];
+    }
+
+    /**
+     * Properties to merge into the Organization node: its identity (@id, name, url, sameAs) when set,
+     * hasMerchantReturnPolicy and hasShippingService when the policies are switched on.
+     *
+     * @return array<string, mixed>
+     */
     public function getOrganizationData(): array
     {
+        $identity = $this->getOrganizationIdentity();
         if (!Configuration::get(self::CONFIG_ENABLED)) {
-            return [];
+            return $identity;
         }
 
+        return $identity + $this->getPolicyData();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getOrganizationIdentity(): array
+    {
+        $url = trim((string) Configuration::get(self::CONFIG_ORG_URL));
+        $identity = ['@id' => ($url !== '' ? rtrim($url, '/') . '/' : $this->context->link->getPageLink('index', true)) . '#organization'];
+        $name = trim((string) Configuration::get(self::CONFIG_ORG_NAME));
+        if ($name !== '') {
+            $identity['name'] = $name;
+        }
+        if ($url !== '') {
+            $identity['url'] = $url;
+        }
+        $description = trim((string) Configuration::get(self::CONFIG_ORG_DESCRIPTION));
+        if ($description !== '') {
+            $identity['description'] = $description;
+        }
+        $logo = trim((string) Configuration::get(self::CONFIG_ORG_LOGO));
+        if ($logo !== '') {
+            $identity['logo'] = ['@type' => 'ImageObject', 'url' => $logo];
+        }
+        $sameAs = $this->getSameAs();
+        if ($sameAs) {
+            $identity['sameAs'] = $sameAs;
+        }
+
+        return $identity;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getSameAs(): array
+    {
+        return array_values(array_filter(array_map('trim', preg_split('/\R/', (string) Configuration::get(self::CONFIG_ORG_SAME_AS)) ?: [])));
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function getPolicyData(): array
+    {
         $currency = Currency::getDefaultCurrency();
         $country = $this->getShipCountryIso();
         $transit = $this->servicePeriod(
@@ -263,6 +327,24 @@ class M4p_JsonLd extends Module
         $values = [self::CONFIG_ENABLED => (int) (bool) Tools::getValue(self::CONFIG_ENABLED)];
         $errors = [];
 
+        $values[self::CONFIG_ORG_NAME] = trim((string) Tools::getValue(self::CONFIG_ORG_NAME));
+        $values[self::CONFIG_ORG_URL] = trim((string) Tools::getValue(self::CONFIG_ORG_URL));
+        if ($values[self::CONFIG_ORG_URL] !== '' && !Validate::isAbsoluteUrl($values[self::CONFIG_ORG_URL])) {
+            $errors[self::CONFIG_ORG_URL] = $this->trans('Enter the website address with https://, e.g. https://example.com.', [], 'Modules.M4pjsonld.Admin');
+        }
+        $values[self::CONFIG_ORG_DESCRIPTION] = trim(strip_tags((string) Tools::getValue(self::CONFIG_ORG_DESCRIPTION)));
+        $values[self::CONFIG_ORG_LOGO] = trim((string) Tools::getValue(self::CONFIG_ORG_LOGO));
+        if ($values[self::CONFIG_ORG_LOGO] !== '' && !Validate::isAbsoluteUrl($values[self::CONFIG_ORG_LOGO])) {
+            $errors[self::CONFIG_ORG_LOGO] = $this->trans('Enter the full logo address, starting with https://.', [], 'Modules.M4pjsonld.Admin');
+        }
+        $profiles = array_values(array_filter(array_map('trim', preg_split('/\R/', (string) Tools::getValue(self::CONFIG_ORG_SAME_AS)) ?: [])));
+        foreach ($profiles as $profile) {
+            if (!Validate::isAbsoluteUrl($profile)) {
+                $errors[self::CONFIG_ORG_SAME_AS] = $this->trans('Enter one full address per line, starting with https://.', [], 'Modules.M4pjsonld.Admin');
+            }
+        }
+        $values[self::CONFIG_ORG_SAME_AS] = implode("\n", $profiles);
+
         foreach (self::INT_FIELDS as $key) {
             $raw = trim((string) Tools::getValue($key));
             if (!ctype_digit($raw)) {
@@ -364,6 +446,19 @@ class M4p_JsonLd extends Module
         ];
         $submit = ['title' => $this->trans('Save', [], 'Admin.Actions'), 'name' => 'submitM4pJsonLd'];
 
+        $organizationForm = ['form' => [
+            'legend' => ['title' => $this->trans('Organization', [], 'Modules.M4pjsonld.Admin'), 'icon' => 'icon-building'],
+            'description' => $this->trans('Who runs the shop, as search engines and AI assistants should see it. Fill in only when it differs from the shop: e.g. a demo or a brand shop of a larger company.', [], 'Modules.M4pjsonld.Admin'),
+            'input' => [
+                ['type' => 'text', 'name' => self::CONFIG_ORG_NAME, 'label' => $this->trans('Name', [], 'Modules.M4pjsonld.Admin'), 'desc' => $this->trans('Empty: the shop name.', [], 'Modules.M4pjsonld.Admin')],
+                ['type' => 'text', 'name' => self::CONFIG_ORG_URL, 'label' => $this->trans('Website', [], 'Modules.M4pjsonld.Admin'), 'desc' => $this->trans('The main website of the organization. Use the same address on every site of the organization, so search engines treat them as one. Empty: this shop.', [], 'Modules.M4pjsonld.Admin')],
+                ['type' => 'textarea', 'name' => self::CONFIG_ORG_DESCRIPTION, 'label' => $this->trans('Description', [], 'Modules.M4pjsonld.Admin'), 'rows' => 3, 'desc' => $this->trans('One or two sentences: what the organization does. Use the same text on every site of the organization. Empty: no description.', [], 'Modules.M4pjsonld.Admin')],
+                ['type' => 'text', 'name' => self::CONFIG_ORG_LOGO, 'label' => $this->trans('Logo', [], 'Modules.M4pjsonld.Admin'), 'desc' => $this->trans('Full address of the logo file (PNG, JPG, WEBP or SVG), the same as on the organization\'s website. Empty: the shop logo.', [], 'Modules.M4pjsonld.Admin')],
+                ['type' => 'textarea', 'name' => self::CONFIG_ORG_SAME_AS, 'label' => $this->trans('Profiles', [], 'Modules.M4pjsonld.Admin'), 'rows' => 4, 'desc' => $this->trans('One address per line: GitHub, LinkedIn, Facebook, the company register.', [], 'Modules.M4pjsonld.Admin')],
+            ],
+            'submit' => $submit,
+        ]];
+
         $returnsForm = ['form' => [
             'legend' => ['title' => $this->trans('Returns', [], 'Modules.M4pjsonld.Admin'), 'icon' => 'icon-undo'],
             'input' => [
@@ -429,7 +524,7 @@ class M4p_JsonLd extends Module
         $helper->default_form_language = (int) Configuration::get('PS_LANG_DEFAULT');
         $helper->tpl_vars = ['fields_value' => $fields];
 
-        return $helper->generateForm([$returnsForm, $shippingForm]);
+        return $helper->generateForm([$organizationForm, $returnsForm, $shippingForm]);
     }
 
     /**
@@ -652,6 +747,11 @@ class M4p_JsonLd extends Module
             self::CONFIG_EU_CARRIER => 0,
             self::CONFIG_EU_TRANSIT_MIN => 2,
             self::CONFIG_EU_TRANSIT_MAX => 5,
+            self::CONFIG_ORG_NAME => '',
+            self::CONFIG_ORG_URL => '',
+            self::CONFIG_ORG_SAME_AS => '',
+            self::CONFIG_ORG_LOGO => '',
+            self::CONFIG_ORG_DESCRIPTION => '',
         ];
     }
 }
