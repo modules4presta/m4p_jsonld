@@ -4,6 +4,20 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the module uses
 [semantic versioning](https://semver.org/).
 
+## [2.1.0] - 2026-11-19
+
+### Added
+
+- Organization identity: name, main website, description, logo and profiles (`sameAs`) of the organization behind the
+  shop, and an `@id` built from the website (`<website>#organization`), so several sites of one company
+  describe the same organization. Empty fields leave the shop's own values.
+- The organization data reaches front templates as `$modules.m4p_jsonld.organization`
+  (`actionFrontControllerSetVariables`); `getOrganizationData()` keeps working.
+
+### Changed
+
+- `getOrganizationData()` returns the identity also while the return and shipping policies are switched off.
+
 ## [2.0.0] - 2026-10-28
 
 The module is now the shop's structured-data module and is installed as `m4p_jsonld`. Settings are

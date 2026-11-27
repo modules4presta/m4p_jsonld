@@ -2,8 +2,8 @@
 <module>
     <name>m4p_jsonld</name>
     <displayName><![CDATA[Structured data (JSON-LD)]]></displayName>
-    <version><![CDATA[2.0.0]]></version>
-    <description><![CDATA[Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.]]></description>
+    <version><![CDATA[2.1.0]]></version>
+    <description><![CDATA[Structured data of the shop as JSON-LD. Covers the identity of the Organization and the return and shipping conditions of the Organization and Offer markup.]]></description>
     <author><![CDATA[Modules4Presta]]></author>
     <tab><![CDATA[seo]]></tab>
     <is_configurable>1</is_configurable>

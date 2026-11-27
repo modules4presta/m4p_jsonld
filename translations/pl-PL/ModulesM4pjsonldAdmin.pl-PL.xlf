@@ -6,13 +6,25 @@
         <source>Structured data (JSON-LD)</source>
         <target>Dane strukturalne (JSON-LD)</target>
       </trans-unit>
-      <trans-unit id="6fd0ce7c14bd2f53239af257f4d8b724">
-        <source>Structured data of the shop as JSON-LD. Covers the return and shipping conditions of the Organization and Offer markup.</source>
-        <target>Dane strukturalne sklepu jako JSON-LD. Obejmuje warunki zwrotów i wysyłki w znacznikach organizacji i oferty.</target>
+      <trans-unit id="0dde37047f95a472f52e38d3fc8ffec7">
+        <source>Structured data of the shop as JSON-LD. Covers the identity of the Organization and the return and shipping conditions of the Organization and Offer markup.</source>
+        <target>Dane strukturalne sklepu w JSON-LD: tożsamość organizacji oraz warunki zwrotów i dostawy w danych Organization i Offer.</target>
       </trans-unit>
       <trans-unit id="f38f5974cdc23279ffe6d203641a8bdf">
         <source>Settings updated.</source>
         <target>Ustawienia zapisane.</target>
+      </trans-unit>
+      <trans-unit id="b2e3452dca716f6b5588c1d0fd8d866a">
+        <source>Enter the website address with https://, e.g. https://example.com.</source>
+        <target>Wpisz adres strony z https://, np. https://example.com.</target>
+      </trans-unit>
+      <trans-unit id="699a3b2d28fa12e6c9fb630ffd366e7e">
+        <source>Enter the full logo address, starting with https://.</source>
+        <target>Wpisz pełny adres logo, zaczynający się od https://.</target>
+      </trans-unit>
+      <trans-unit id="b48f9c50f5718a4c6b7e96c4eee90e06">
+        <source>Enter one full address per line, starting with https://.</source>
+        <target>Wpisz jeden pełny adres w wierszu, zaczynający się od https://.</target>
       </trans-unit>
       <trans-unit id="4be400e9dd00ab957010a5e24a93fb87">
         <source>Days must be whole numbers, 0 or more.</source>
@@ -49,6 +61,46 @@
       <trans-unit id="a62dda7f9fd20f8d68c928f1d82af931">
         <source>None (domestic shipping only)</source>
         <target>Brak (tylko wysyłka krajowa)</target>
+      </trans-unit>
+      <trans-unit id="d6b258792ff06f82933c74eeb8aef591">
+        <source>Organization</source>
+        <target>Organizacja</target>
+      </trans-unit>
+      <trans-unit id="ee15a0319893474f07370c838265992f">
+        <source>Who runs the shop, as search engines and AI assistants should see it. Fill in only when it differs from the shop: e.g. a demo or a brand shop of a larger company.</source>
+        <target>Kto prowadzi sklep – tak, jak mają to widzieć wyszukiwarki i asystenci AI. Wypełnij tylko, gdy to ktoś inny niż sam sklep, np. w sklepie demo albo sklepie marki większej firmy.</target>
+      </trans-unit>
+      <trans-unit id="49ee3087348e8d44e1feda1917443987">
+        <source>Name</source>
+        <target>Nazwa</target>
+      </trans-unit>
+      <trans-unit id="9c7b6a294d436a87e7b0f592193ca5b4">
+        <source>Empty: the shop name.</source>
+        <target>Puste: nazwa sklepu.</target>
+      </trans-unit>
+      <trans-unit id="15bbb9d0bbf25e8d2978de1168c749dc">
+        <source>Website</source>
+        <target>Strona internetowa</target>
+      </trans-unit>
+      <trans-unit id="91645e65b92db689088b41cc04335f53">
+        <source>The main website of the organization. Use the same address on every site of the organization, so search engines treat them as one. Empty: this shop.</source>
+        <target>Główna strona organizacji. Wpisz ten sam adres na każdej stronie organizacji – wyszukiwarki połączą je w jedną firmę. Puste: ten sklep.</target>
+      </trans-unit>
+      <trans-unit id="8c2857a9ad1d8f31659e35e904e20fa6">
+        <source>Logo</source>
+        <target>Logo</target>
+      </trans-unit>
+      <trans-unit id="8bade7d62a54c59a845a913851d26721">
+        <source>Full address of the logo file (PNG, JPG, WEBP or SVG), the same as on the organization's website. Empty: the shop logo.</source>
+        <target>Pełny adres pliku logo (PNG, JPG, WEBP albo SVG), tego samego co na stronie organizacji. Puste: logo sklepu.</target>
+      </trans-unit>
+      <trans-unit id="d0f25115288c15321ecf672f0d6a83ea">
+        <source>Profiles</source>
+        <target>Profile</target>
+      </trans-unit>
+      <trans-unit id="14d41beec87a2e0033dc246da1b29458">
+        <source>One address per line: GitHub, LinkedIn, Facebook, the company register.</source>
+        <target>Jeden adres w wierszu: GitHub, LinkedIn, Facebook, rejestr firm.</target>
       </trans-unit>
       <trans-unit id="4762fdc5fdf2ab3118f73fe252a6668b">
         <source>Returns</source>
@@ -169,6 +221,14 @@
       <trans-unit id="da89e928469c9e8380be8ad21cff80b8">
         <source>Transit time abroad to</source>
         <target>Czas dostawy za granicę do</target>
+      </trans-unit>
+      <trans-unit id="b5a7adde1af5c87d7fd797b6245c2a39">
+        <source>Description</source>
+        <target state="final">Opis</target>
+      </trans-unit>
+      <trans-unit id="cd3195aaae2f439a107c08ed1a315d0f">
+        <source>One or two sentences: what the organization does. Use the same text on every site of the organization. Empty: no description.</source>
+        <target state="final">Jedno lub dwa zdania o tym, czym zajmuje się organizacja. Ten sam tekst na każdej stronie organizacji. Puste pole: bez opisu.</target>
       </trans-unit>
     </body>
   </file>
